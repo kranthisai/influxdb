@@ -9,9 +9,9 @@ InfluxDB image
 Usage
 -----
 
-To create the image `tutum/influxdb`, execute the following command on tutum-docker-influxdb folder:
+To create the image `AdvancedClimateSystems/influxdb`, execute the following command on tutum-docker-influxdb folder:
 
-    docker build -t tutum/influxdb .
+    docker build -t AdvancedClimateSystems/influxdb .
 
 You can now push new image to the registry:
 
@@ -20,9 +20,10 @@ You can now push new image to the registry:
 Tags
 ----
 
-    tutum/influxdb:latest -> influxdb 0.9.6.1
-    tutum/influxdb:0.9    -> influxdb 0.9.6.1
-    tutum/influxdb:0.8.8  -> influxdb 0.8.8
+    AdvancedClimateSystems/influxdb:latest   -> influxdb 0.10.0-1
+    AdvancedClimateSystems/influxdb:0.10     -> influxdb 0.10.0-1
+    AdvancedClimateSystems/influxdb:0.9      -> influxdb 0.9.6.1
+    AdvancedClimateSystems/influxdb:0.8.8    -> influxdb 0.8.8
 
 Running your InfluxDB image
 ---------------------------

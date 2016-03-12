@@ -47,9 +47,10 @@ Open your browser to access `localhost:8083` to configure InfluxDB. Fill the por
 Alternatively, you can use RESTful API to talk to InfluxDB on port `8086`. For example, if you have problems with the initial database creation for version `0.9.x`, you can use the new `influx` cli tool to configure the database. While the container is running, you launch the tool with the following command:
 
   ```
-  docker exec -ti influxdb-container-name /opt/influxdb/influx
-  Connected to http://localhost:8086 version 0.9.2.1
-  InfluxDB shell 0.9.2.1
+  docker exec -ti influxdb-container-name /usr/bin/influx
+  Visit https://enterprise.influxdata.com to register for updates, InfluxDB server management, and monitoring.
+  Connected to http://localhost:8086 version 0.9.6.1
+  InfluxDB shell 0.9.6.1
   >
   ```
 
@@ -77,6 +78,24 @@ Alternatively, create a database and user with the InfluxDB 0.9 shell:
 ```
 For additional Administration methods with the InfluxDB 0.9 shell, check out the [`Administration`](https://influxdb.com/docs/v0.9/administration/administration.html) guide on the InfluxDB website.
 
+
+Initially execute influxql script (Available in influxdb:0.9)
+------------------------------------------------------------
+Use `-v /tmp/init_script.influxql:init_script.influxql:ro` if you want that script to been executed on the first time the container starts automatically. Each influxql command on separated line. For example:
+
+- Docker run command
+```
+docker run -d -p 8083:8083 -p 8086:8086 -e ADMIN_USER="root" -e INFLUXDB_INIT_PWD="somepassword" -v /tmp/init_script.influxql:init_script.influxql:ro tutum/influxdb:latest
+```
+
+- The influxdb script
+```
+CREATE DATABASE mydb
+CREATE USER writer WITH PASSWORD 'writerpass'
+CREATE USER reader WITH PASSWORD 'readerpass'
+GRANT WRITE ON mydb TO writer
+GRANT READ ON mydb TO reader
+```
 
 SSL support (Available only in influxdb:0.8.8)
 ---------------------------------------------
@@ -114,14 +133,14 @@ InfluxDB has a plugin to support the [collectd network plugin](https://collectd.
 
 ```docker run -d -p 8083:8083 -p 8086:8086 -p 25826:25826/udp -e ADMIN_USER="root" -e INFLUXDB_INIT_PWD="somepassword" -e PRE_CREATE_DB=my_db -e COLLECTD_DB="my_db" -e COLLECTD_BINDING=':25826' -e COLLECTD_RETENTION_POLICY="mypolicy" tutum/influxdb```
 
-More details on the configuration of InfluxDB's graphite plugin can be found at: https://github.com/influxdb/influxdb/blob/master/services/graphite/README.md
+More details on the configuration of InfluxDB's collectd plugin can be found at: https://github.com/influxdb/influxdb/blob/master/services/collectd/README.md
 
 
 UDP support
 ----------------------------------------
 If you provide a `UDP_DB`, influx will open a UDP port (4444 or if provided `UDP_PORT`) for reception of events for the named database.
 
-```docker run -d -p 8083:8083 -p 8086:8086 --expose 8090 --expose 8099 --expose 4444 -e UDP_DB="my_db" tutum/influxdb```
+```docker run -d -p 8083:8083 -p 8086:8086 -p 4444:4444/udp --expose 8090 --expose 8099 --expose 4444 -e UDP_DB="my_db" tutum/influxdb```
 
 Clustering (Available in influxdb:0.9.4.2-1)
 ----------------------------------------
